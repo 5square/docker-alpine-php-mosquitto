@@ -179,7 +179,7 @@ workflows:
       - deploy-arm:
           filters:
             tags:
-              only: /^\d\.\d\.\d-.+-php\d\.\d-mosquitto/
+              only: /^\d\.\d\.\d-php\d\.\d-mosquitto/
             branches:
               ignore: /.*/
           requires:
@@ -187,7 +187,7 @@ workflows:
       - deploy-amd64:
           filters:
             tags:
-              only: /^\d\.\d\.\d-.+-php\d\.\d-mosquitto/
+              only: /^\d\.\d\.\d-php\d\.\d-mosquitto/
             branches:
               ignore: /.*/
           requires:
@@ -195,7 +195,7 @@ workflows:
       - create-manifest:
           filters:
             tags:
-              only: /^\d\.\d\.\d-.+-php\d\.\d-mosquitto/
+              only: /^\d\.\d\.\d-php\d\.\d-mosquitto/
             branches:
               ignore: /.*/
           requires:
@@ -204,7 +204,7 @@ workflows:
       - post-deploy:
           filters:
             tags:
-              only: /^\d\.\d\.\d-.+-php\d\.\d-mosquitto/
+              only: /^\d\.\d\.\d-php\d\.\d-mosquitto/
             branches:
               ignore: /.*/
           requires:
