@@ -1,5 +1,5 @@
 # Image and binary can be overidden with env vars.
-DOCKER_IMAGE ?= homesmarthome/php-mosquitto
+DOCKER_IMAGE ?= 5square/php-mosquitto
 
 include Makefile.run.mk
 include Makefile.build-deps.mk

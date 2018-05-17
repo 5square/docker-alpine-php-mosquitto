@@ -17,17 +17,15 @@ RUN [ "cross-build-start" ]
 # Custom Setup
 #-------------------------------------------------------------------------------
 
-#RUN apk add --no-cache php7 php7-openssl php7-json php7-phar php7-iconv
-RUN apk add --no-cache mosquitto-dev git
+RUN apk add --no-cache mosquitto-dev git autoconf g++ make
 
-RUN https://github.com/mgdm/Mosquitto-PHP.git /mosquittophp
+RUN git clone https://github.com/mgdm/Mosquitto-PHP.git /mosquittophp
 
 WORKDIR /mosquittophp
 
 RUN phpize
-RUN ./configure --with-mosquitto=/path/to/libmosquitto
+RUN ./configure --with-mosquitto=/usr/lib
 RUN make
-RUN make install
 
 #-------------------------------------------------------------------------------
 # Post Build Environment
@@ -50,15 +48,15 @@ RUN [ "cross-build-start" ]
 # Custom Setup
 #-------------------------------------------------------------------------------
 
-#RUN apk add --no-cache php7 php7-openssl php7-json libevent
+COPY --from=builder /mosquittophp/modules/mosquitto.so /usr/local/lib/php/extensions/no-debug-non-zts-20170718/mosquitto.so
 
-COPY --from=builder /app /app
+RUN apk add --no-cache mosquitto-dev
 
 COPY image_files /
 
 ENTRYPOINT ["/usr/local/bin/php"]
 
-CMD ["/app/homeconnect.php"]
+CMD ["/mosq.php"]
 
 #-------------------------------------------------------------------------------
 # Post Build Environment
@@ -74,12 +72,12 @@ ARG BUILD_DATE
 ARG VCS_REF
 ARG VCS_URL
 ARG VERSION
-LABEL de.5square.homesmarthome.build-date=$BUILD_DATE \
-      de.5square.homesmarthome.name="homesmarthome/amazonecho_shuttle" \
-      de.5square.homesmarthome.description="Shuttle service for amazon echo mqtt bridge" \
-      de.5square.homesmarthome.url="homesmarthome.5square.de" \
-      de.5square.homesmarthome.vcs-ref=$VCS_REF \
-      de.5square.homesmarthome.vcs-url="$VCS_URL" \
-      de.5square.homesmarthome.vendor="5square" \
-      de.5square.homesmarthome.version=$VERSION \
-      de.5square.homesmarthome.schema-version="1.0"
+LABEL de.5square.build-date=$BUILD_DATE \
+      de.5square.name="homesmarthome/php-mosquitto" \
+      de.5square.description="Multiarch (amd64 and arm) Docker image with PHP 7.2 and Mosquitto." \
+      de.5square.url="5square.de" \
+      de.5square.vcs-ref=$VCS_REF \
+      de.5square.vcs-url="$VCS_URL" \
+      de.5square.vendor="5square" \
+      de.5square.version=$VERSION \
+      de.5square.schema-version="1.0"
